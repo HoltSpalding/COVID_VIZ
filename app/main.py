@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import random,os, json
+import random,os, json,sys
 import pandas as pd 
+from app.getCoronaData import getConfirmedGivenDate,assignColors
 
 df = pd.read_csv("app/static/us_corona_counties.csv")
 
 df = df.drop("UID",axis=1).drop("iso2",axis=1).drop("iso3",axis=1).drop("code3",axis=1).drop("Country_Region",axis=1)
-print(df)
+
+max_confirmed = df["Confirmed"].max()
 
 app = Flask(__name__,template_folder='templates') 
 
@@ -52,15 +54,8 @@ def getmapdata():
     if request.method == "POST":
         assert(request.is_json)
         date = request.get_json()["date"]
-        df_filtered_by_date = df.loc[df['Date'] == date]
-        df_filtered_by_date = df_filtered_by_date.dropna(subset=["FIPS", "Confirmed"])
-        print(df_filtered_by_date.info())
-        # FIPS_list = df_filtered_by_date["FIPS"]
-        # Confirmed_list = df_filtered_by_date["Confirmed"]
-        # Zipped_list = [{'FIPS': str(FIP_id), 'Confirmed': str(confirmed_cases)} for FIP_id, confirmed_cases in zip(FIPS_list, Confirmed_list)]
-        # print("...............................................................................")
-        # print(Confirmed_list[66])
-        Zipped_list = df_filtered_by_date[["FIPS", "Confirmed"]]
-        print(Zipped_list)
-        print(Zipped_list.to_json())
-        return Zipped_list.to_json()
+        confirmed_given_date = getConfirmedGivenDate(df, date)
+        print(max_confirmed)
+        return assignColors(confirmed_given_date,0,max_confirmed)
+        # print(confirmed_given_date)
+        # return confirmed_given_date
