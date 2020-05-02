@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import random,os 
+import random,os, json
 import pandas as pd 
+
+df = pd.read_csv("app/static/us_corona_counties.csv")
+
+df = df.drop("UID",axis=1).drop("iso2",axis=1).drop("iso3",axis=1).drop("code3",axis=1).drop("Country_Region",axis=1)
+print(df)
 
 app = Flask(__name__,template_folder='templates') 
 
@@ -37,16 +42,22 @@ def getdata():
         # print(".................")
         # return request.data
 
-df = pd.read_csv("app/static/us_corona_counties.csv")
 
-df = df.drop("UID",axis=1).drop("iso2",axis=1).drop("iso3",axis=1).drop("code3",axis=1).drop("Country_Region",axis=1)
-print(df)
+
+
 @app.route("/getmapdata", methods=["GET","POST"])
-def getdf():
+def getmapdata():
     if request.method == 'GET':
         return df.to_json()
     if request.method == "POST":
         assert(request.is_json)
-        args = request.get_json()
-        print(args["b"])
-        return df.to_json()
+        date = request.get_json()["date"]
+        df_filtered_by_date = df.loc[df['Date'] == date]
+        FIPS_list = df_filtered_by_date["FIPS"]
+        Confirmed_list = df_filtered_by_date["Confirmed"]
+        Zipped_list = [{'FIPS': str(FIP_id), 'Confirmed': str(confirmed_cases)} for FIP_id, confirmed_cases in zip(FIPS_list, Confirmed_list)]
+        print("...............................................................................")
+        print(Confirmed_list[66])
+        Zipped_list = df_filtered_by_date[["FIPS", "Confirmed"]]
+        print(Zipped_list)
+        return json.dumps(Zipped_list)

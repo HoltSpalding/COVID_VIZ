@@ -35,6 +35,8 @@
     current_transform = null
     current_scale = null
 
+    default_date = "1/22/20"
+
     //Allows python variables from Flask server to be received
     $.extend({
         getFlaskVars: function(url) {
@@ -87,8 +89,9 @@
         
 /*            var results = $.getFlaskVars("/getmapdata");
             console.log(results)*/
-            var results2 = $.postFlaskVars("/getmapdata",{"a": "1", "b": "2"});
-            console.log(results2)
+            var county_colorings = $.postFlaskVars("/getmapdata",{"date": default_date});
+            console.log(county_colorings)
+
             if (error) throw error;
              g.append("g")
                 .attr("id", "counties")
