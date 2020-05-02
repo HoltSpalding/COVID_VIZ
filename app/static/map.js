@@ -35,7 +35,7 @@
     current_transform = null
     current_scale = null
 
-    default_date = "1/22/20"
+    default_date = "4/28/20"
 
     //Allows python variables from Flask server to be received
     $.extend({
@@ -91,13 +91,16 @@
             console.log(results)*/
             var county_colorings = $.postFlaskVars("/getmapdata",{"date": default_date});
             console.log(county_colorings)
-
+            console.log(county_colorings["90021"])
             if (error) throw error;
              g.append("g")
                 .attr("id", "counties")
                 .selectAll("path")
                 .data(topojson.feature(us, us.objects.counties).features)
                 .enter().append("path")
+                .style("fill",function(d) {
+                    return county_colorings[d.id]
+                })
                 .attr("d", path)
                 .attr("class", "county-boundary")
                 .on("click", reset);

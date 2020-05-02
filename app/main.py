@@ -54,8 +54,10 @@ def getmapdata():
     if request.method == "POST":
         assert(request.is_json)
         date = request.get_json()["date"]
+        # print(date)
         confirmed_given_date = getConfirmedGivenDate(df, date)
-        print(max_confirmed)
+        # print(confirmed_given_date)
+        # print(max_confirmed)
         return assignColors(confirmed_given_date,0,max_confirmed)
         # print(confirmed_given_date)
         # return confirmed_given_date

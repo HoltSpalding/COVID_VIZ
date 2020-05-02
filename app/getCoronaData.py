@@ -4,7 +4,7 @@ import json
 #get corona data corresponding to particular date
 def getConfirmedGivenDate(df,date):
     #get all rows of a certain date
-    df_filtered_by_date = df.loc[df['Date'] == "1/22/20"]
+    df_filtered_by_date = df.loc[df['Date'] == date]
     #drop all Nan values
     df_filtered_by_date = df_filtered_by_date.dropna(subset=["FIPS", "Confirmed"])
     #Only get the FIPS and Confirmed columns
@@ -25,9 +25,9 @@ def assignColors(df,min_confirmed,max_confirmed):
     # newdf = pd.DataFrame([df.FIPS])
     # print(newdf)
     # df["Confirmed"] = df["Confirmed"].apply(lambda x: "rgb(255," + str(round(255-x*color_unit)) + "," + str(round(255-x*color_unit)) + ")")
-    print(df)
+    # print(df)
     df =  json.loads(df)
-    print(type(df))
+    # print(type(df))
     for key,value in df.items():
         df[key] =  "rgb(255," + str(int(round(255-value*color_unit))) + "," + str(int(round(255-value*color_unit))) + ")"
     return df
