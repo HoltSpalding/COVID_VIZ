@@ -31,11 +31,64 @@
             .attr('class', 'center-container center-items us-state')
            
 
+    //Represents current transformation of map
     current_transform = null
     current_scale = null
 
-    function ready(error, us) {
+    //Allows python variables from Flask server to be received
+    $.extend({
+        getFlaskVars: function(url) {
+            var response = null;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                async: false,
+                success: function(data) {
+                    response = data;
+                }
+            });
+            return response;
+        }
+    });
 
+    //Allows json POST request to be sent to Flask server to be received
+    $.extend({
+        postFlaskVars: function(url,json_data) {
+            var response = null;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(json_data),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function(data) {
+                    response = data;
+                }
+            });
+            return response;
+        }
+    });
+
+/*$.ajax({
+          type: "POST",
+          url: "/getdata",
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify(asdf),
+          success: function(x) {
+            console.log(x)
+           },
+          dataType: "json"
+        });
+*/
+
+    function ready(error, us) {
+        
+/*            var results = $.getFlaskVars("/getmapdata");
+            console.log(results)*/
+            var results2 = $.postFlaskVars("/getmapdata",{"a": "1", "b": "2"});
+            console.log(results2)
             if (error) throw error;
              g.append("g")
                 .attr("id", "counties")
