@@ -8,6 +8,8 @@ df = pd.read_csv("app/static/us_corona_counties.csv")
 df = df.drop("UID",axis=1).drop("iso2",axis=1).drop("iso3",axis=1).drop("code3",axis=1).drop("Country_Region",axis=1)
 
 max_confirmed = df["Confirmed"].max()
+mean_confirmed = df["Confirmed"].mean()
+std_confirmed = df["Confirmed"].std()
 
 app = Flask(__name__,template_folder='templates') 
 
@@ -58,6 +60,6 @@ def getmapdata():
         confirmed_given_date = getConfirmedGivenDate(df, date)
         # print(confirmed_given_date)
         # print(max_confirmed)
-        return assignColors(confirmed_given_date,0,max_confirmed)
+        return assignColors(confirmed_given_date,0,max_confirmed,mean_confirmed,std_confirmed)
         # print(confirmed_given_date)
         # return confirmed_given_date
