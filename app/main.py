@@ -9,6 +9,9 @@ app = Flask(__name__,template_folder='templates')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),'favicon.ico')
 
+@app.route('/usjson')
+def usjson():
+    return send_from_directory(os.path.join(app.root_path, 'static'),'us.json')
 
 @app.route("/") 
 def index(): 
