@@ -3,17 +3,19 @@ import random,os, json,sys
 import pandas as pd 
 from app.getCoronaData import getConfirmedGivenDate,assignColors
 
+#Save corona data in DataFrame
 df = pd.read_csv("app/static/us_corona_counties.csv")
-
 df = df.drop("UID",axis=1).drop("iso2",axis=1).drop("iso3",axis=1).drop("code3",axis=1).drop("Country_Region",axis=1)
-
+#Confirmed cases stats
 max_confirmed = df["Confirmed"].max()
 mean_confirmed = df["Confirmed"].mean()
 std_confirmed = df["Confirmed"].std()
 
 app = Flask(__name__,template_folder='templates') 
 
-
+@app.route("/") 
+def index(): 
+    return render_template('index.html')
 
 @app.route('/favicon.ico')
 def favicon():
@@ -23,43 +25,11 @@ def favicon():
 def usjson():
     return send_from_directory(os.path.join(app.root_path, 'static'),'us.json')
 
-@app.route("/") 
-def index(): 
-    return render_template('index.html')
 
-
-
-@app.route("/getdata", methods=["GET","POST"])
-def getdata():
-    if request.method == 'GET':
-        color = random.choice(["red","blue","green"])
-        return jsonify(color)
-    if request.method == "POST":
-        print (request.is_json)
-        content = request.get_json()
-        print (content)
-        print(content["data"])
-        return content["data"]
-        # print(request.data.decode('UTF-8'))
-        # print(".................")
-        # print(request.data)
-        # print(".................")
-        # return request.data
-
-
-
-
-@app.route("/getmapdata", methods=["GET","POST"])
-def getmapdata():
-    if request.method == 'GET':
-        return df.to_json()
+@app.route("/get_map_data", methods=["POST"])
+def get_map_data():
     if request.method == "POST":
         assert(request.is_json)
         date = request.get_json()["date"]
-        # print(date)
         confirmed_given_date = getConfirmedGivenDate(df, date)
-        # print(confirmed_given_date)
-        # print(max_confirmed)
         return assignColors(confirmed_given_date,0,max_confirmed,mean_confirmed,std_confirmed)
-        # print(confirmed_given_date)
-        # return confirmed_given_date
