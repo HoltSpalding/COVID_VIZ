@@ -149,6 +149,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area" id="myAreaChart">
+                    <div id="container" class="svg-container">
+</div>
 <!--                     <canvas id="myAreaChart"></canvas>
  -->                  </div>
                 </div>
@@ -217,17 +219,55 @@
     <!-- End of Content Wrapper -->
 
   </div>
-
+  <style>
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.chart-area {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 50%;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/*                    <div id="container" class="svg-container">*/
+/*                  <div class="chart-area" id="myAreaChart">
+*/
+  </style>
   <script type="text/javascript">
 
+map_dims = document.getElementById('myAreaChart').getBoundingClientRect()
+w = map_dims.width.toString()
+h = map_dims.height.toString()
 
+var svg = d3.select("div#myAreaChart")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "0 0 " + w + " " + h)
+  .classed("svg-content", true);
 
-
-
-    var svg = d3.select( "#myAreaChart" )
+/*    var svg = d3.select( "#myAreaChart" )
               .append( "svg" )
               .attr( "width", "100%" )
-              .attr( "height", "100%")
+              .attr( "height", "100%")*/
 
 
       svg.append("rect")
