@@ -15,7 +15,7 @@
 
 
 </body>
-<h1>COVID VIZ</h1>
+<h1>asdfasdf</h1>
 <script type="text/javascript">
 
 
@@ -29,39 +29,15 @@ var circle = svg.append("circle")
             .attr("r", 40)
             .attr("fill","red")
             .attr("stroke","black");
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
 
 circle.on("click", function() {
-    datam = getRandomInt(3).toString()
-    console.log(datam)
-    asdf = {
-    "device": "TemperatureSensor",
-    "value": "20",
-    "timestamp": "25/01/2017 10:10:05"
-}
-/*    $.post("/getdata", datam, function(x) {
-        alert(x);
-    });*/
 
-
-        $.ajax({
-          type: "POST",
-          url: "/getdata",
-          contentType: 'application/json; charset=utf-8',
-          data: JSON.stringify(asdf),
-          success: function(x,y,z) {
-            console.log(x)
-           },
-          dataType: "json"
-        });
-    /*$.getJSON('/getdata', function(dat) {
+    $.getJSON('/getdata', function(dat) {
           console.log(dat)
           circle.transition()
                         .duration(500)
             .attr("fill",dat)
-        });*/
+        });
 
 });
 

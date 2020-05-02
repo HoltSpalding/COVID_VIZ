@@ -11,8 +11,19 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/getdata")
+@app.route("/getdata", methods=["GET","POST"])
 def getdata():
-    color = random.choice(["red","blue","green"])
-    return jsonify(color)
+    if request.method == 'GET':
+        color = random.choice(["red","blue","green"])
+        return jsonify(color)
+    if request.method == "POST":
+        print (request.is_json)
+        content = request.get_json()
+        print (content)
+        return "s"
+        # print(request.data.decode('UTF-8'))
+        # print(".................")
+        # print(request.data)
+        # print(".................")
+        # return request.data
 
