@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COMP177 - Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-queue/3.0.7/d3-queue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+</body>
+<h1>asdfasdf</h1>
+<script type="text/javascript">
+
+
+var svg = d3.select("body").append("svg")
+                                    .attr("width", 500)
+                                    .attr("height", 500)
+
+var circle = svg.append("circle")
+            .attr("cx", 200)
+            .attr("cy", 200)
+            .attr("r", 40)
+            .attr("fill","red")
+            .attr("stroke","black");
+
+circle.on("click", function() {
+
+    $.getJSON('/getdata', function(dat) {
+          console.log(dat)
+          circle.transition()
+                        .duration(500)
+            .attr("fill",dat)
+        });
+
+});
+
+</script>
+
+
+</html>
