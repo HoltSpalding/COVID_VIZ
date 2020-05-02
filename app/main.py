@@ -53,11 +53,14 @@ def getmapdata():
         assert(request.is_json)
         date = request.get_json()["date"]
         df_filtered_by_date = df.loc[df['Date'] == date]
-        FIPS_list = df_filtered_by_date["FIPS"]
-        Confirmed_list = df_filtered_by_date["Confirmed"]
-        Zipped_list = [{'FIPS': str(FIP_id), 'Confirmed': str(confirmed_cases)} for FIP_id, confirmed_cases in zip(FIPS_list, Confirmed_list)]
-        print("...............................................................................")
-        print(Confirmed_list[66])
+        df_filtered_by_date = df_filtered_by_date.dropna(subset=["FIPS", "Confirmed"])
+        print(df_filtered_by_date.info())
+        # FIPS_list = df_filtered_by_date["FIPS"]
+        # Confirmed_list = df_filtered_by_date["Confirmed"]
+        # Zipped_list = [{'FIPS': str(FIP_id), 'Confirmed': str(confirmed_cases)} for FIP_id, confirmed_cases in zip(FIPS_list, Confirmed_list)]
+        # print("...............................................................................")
+        # print(Confirmed_list[66])
         Zipped_list = df_filtered_by_date[["FIPS", "Confirmed"]]
         print(Zipped_list)
-        return json.dumps(Zipped_list)
+        print(Zipped_list.to_json())
+        return Zipped_list.to_json()
