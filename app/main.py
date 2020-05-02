@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, jsonify 
-import random 
+from flask import Flask, render_template, request, jsonify, send_from_directory
+import random,os 
 
 app = Flask(__name__,template_folder='templates') 
 
 
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),'favicon.ico')
 
 
 @app.route("/") 
@@ -20,7 +24,8 @@ def getdata():
         print (request.is_json)
         content = request.get_json()
         print (content)
-        return "s"
+        print(content["data"])
+        return content["data"]
         # print(request.data.decode('UTF-8'))
         # print(".................")
         # print(request.data)

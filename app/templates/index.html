@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>COMP177 - Visualization</title>
+    
+    <title>COVID VISUALIZER</title>
+
+    <!-- javascript libs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-queue/3.0.7/d3-queue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    <!-- style sheets -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+
 </head>
 
 <body>
 
 
 </body>
-<h1>COVID VIZ</h1>
+<h1>COVID VIZUALIZER</h1>
 <script type="text/javascript">
 
 
@@ -34,12 +41,10 @@ function getRandomInt(max) {
 }
 
 circle.on("click", function() {
-    datam = getRandomInt(3).toString()
-    console.log(datam)
+    data = getRandomInt(3).toString()
+    console.log(data)
     asdf = {
-    "device": "TemperatureSensor",
-    "value": "20",
-    "timestamp": "25/01/2017 10:10:05"
+    "data": data
 }
 /*    $.post("/getdata", datam, function(x) {
         alert(x);
@@ -51,8 +56,9 @@ circle.on("click", function() {
           url: "/getdata",
           contentType: 'application/json; charset=utf-8',
           data: JSON.stringify(asdf),
-          success: function(x,y,z) {
+          success: function(x) {
             console.log(x)
+            /*alert(x)*/
            },
           dataType: "json"
         });
