@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import random,os, json,sys
 import pandas as pd 
-from app.getCoronaData import getConfirmedGivenDate,assignColors
+# from app.getCoronaData import getConfirmedGivenDate,assignColors
+from app.get_corona_data import county_state_confirmed_stats,county_state_assign_colors
 
 #Save corona data in DataFrame
 df = pd.read_csv("app/static/us_corona_counties.csv")
@@ -31,5 +32,8 @@ def get_map_data():
     if request.method == "POST":
         assert(request.is_json)
         date = request.get_json()["date"]
-        confirmed_given_date = getConfirmedGivenDate(df, date)
-        return assignColors(confirmed_given_date,0,max_confirmed,mean_confirmed,std_confirmed)
+        confirmed_given_date = county_state_confirmed_stats(df, date)
+        county, state = county_state_assign_colors(confirmed_given_date,0,max_confirmed)
+        print(county)
+        print(state)
+        return {"county" : county, "state" : state}

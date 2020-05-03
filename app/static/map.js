@@ -62,14 +62,20 @@ $.extend({ postFlaskVars: function(url,json_data) {
                             contentType: 'application/json; charset=utf-8',
                             async: false,
                             success: function(data) {
-                                response = data;
+/*                                console.log(data)
+*/                                response = data;
                             }});
                             return response;}});
 
 
 function ready(error, us) {
-            var county_colorings = $.postFlaskVars("/get_map_data",{"date": default_date});
-
+            response = $.postFlaskVars("/get_map_data",{"date": default_date});
+/*            console.log(state_colorings)
+*/            /*console.log(county_colorings)*/
+            county_colorings = response["county"]
+            state_colorings = response["state"]
+            console.log(state_colorings)
+            console.log(county_colorings)
             if (error) throw error;
 
             g.append("g")
@@ -90,6 +96,9 @@ function ready(error, us) {
              .enter().append("path")
              .attr("d", path)
              .attr("class", "state")
+             .style("fill",function(d) {
+                return state_colorings[d.id]
+             })
              .on("click", clicked);
 
 
