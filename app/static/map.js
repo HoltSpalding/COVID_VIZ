@@ -235,9 +235,27 @@ var label = slider.append("text")
 
 function update(h) {
   // update position and text of label according to slider scale
+
+
+
   handle.attr("cx", x(h));
   label
     .attr("x", x(h))
     .text(formatDate(h));
   console.log(formatDate(h))
+  console.log(h)
+  var formatDate2 = d3.timeFormat("%m %d %Y");
+
+  date = formatDate2(h).split(" ")
+  date = date[0][1] + "/" + date[1] + "/20"
+/*  console.log(date)
+  date = "2/28/20"*/
+  response = $.postFlaskVars("/get_map_data",{"date": date});
+  county_colorings = response["county"]
+    state_colorings = response["state"]
+  console.log(state_colorings)
+
+d3.selectAll(".state").style("fill",function(d) {
+                return  state_colorings[d.id]
+             })
 }
