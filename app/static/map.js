@@ -74,8 +74,8 @@ function ready(error, us) {
 */            /*console.log(county_colorings)*/
             county_colorings = response["county"]
             state_colorings = response["state"]
-            console.log(state_colorings)
-            console.log(county_colorings)
+/*            console.log(state_colorings)
+            console.log(county_colorings)*/
             if (error) throw error;
 
             g.append("g")
@@ -139,3 +139,105 @@ function reset() {
              .duration(750)
              .style("stroke-width", "1.5px")
              .attr("transform", "translate(" - current_transform + ")scale(" - current_scale + ")");}
+
+
+
+
+//slider
+slider_dims = document.getElementById('slider1card').getBoundingClientRect()
+slider_width = (slider_dims.width).toString()
+slider_height = (slider_dims.height+100).toString()
+
+var formatDateIntoMonth = d3.timeFormat("%b");
+var formatDate = d3.timeFormat("%b %d %Y");
+var parseDate = d3.timeParse("%m/%d/%y");
+
+var startDate = new Date("2020-01-23"),
+    endDate = new Date("2020-04-30");
+/*var margin = {top:100, right:50, bottom:0, left:50},
+    slider_width = slider_width - margin.left - margin.right,
+    slider_height = slider_height - margin.top - margin.bottom;
+*/
+var svg = d3.select("#slider1")
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+     .attr("viewBox", "0 0 " + slider_width + " " + slider_height)
+/*     .classed("svg-content", true)
+*/
+
+
+/*                .attr("viewBox", "0 0 " + slider_width + " " + slider_height)
+*//*                .classed("svg-content", true)*/
+/*                .attr("height", slider_height + 1)
+*//*.attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + slider_width + " " + slider_height)
+                .classed("svg-content", true)*/
+/*    .attr("width", slider_width)
+    .attr("height", slider_height);  
+*/
+
+    var moving = false;
+var currentValue = 0;
+var targetValue = slider_width*0.9;
+
+    
+var x = d3.scaleTime()
+    .domain([startDate, endDate])
+    .range([0, targetValue])
+    .clamp(true);
+
+var slider = svg.append("g")
+    .attr("class", "slider")
+
+    .attr("transform", "translate(" + 50 + "," + slider_height/2 + ")");
+
+slider.append("line")
+    .attr("class", "track")
+    .attr("x1", x.range()[0])
+    .attr("x2", x.range()[1])
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-inset")
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-overlay")
+    .call(d3.drag()
+        .on("start.interrupt", function() { slider.interrupt(); })
+        .on("start drag", function() {
+          currentValue = d3.event.x;
+          update(x.invert(currentValue)); 
+        })
+    );
+
+slider.insert("g", ".track-overlay")
+    .attr("class", "ticks")
+    .attr("transform", "translate(0," + 18 + ")")
+  .selectAll("text")
+    .data(x.ticks(4))
+    .enter()
+    .append("text")
+    .attr("x", x)
+    .attr("y", 4)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return formatDateIntoMonth(d); });
+
+var handle = slider.insert("circle", ".track-overlay")
+    .attr("class", "handle")
+    .attr("r", 9);
+
+var label = slider.append("text")  
+    .attr("class", "label")
+    .attr("text-anchor", "middle")
+    .text(formatDate(startDate))
+    .attr("transform", "translate(0," + (-25) + ")")
+
+ 
+////////// plot //////////
+
+
+function update(h) {
+  // update position and text of label according to slider scale
+  handle.attr("cx", x(h));
+  label
+    .attr("x", x(h))
+    .text(formatDate(h));
+  console.log(formatDate(h))
+}
